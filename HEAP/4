@@ -1,0 +1,54 @@
+class MinHeap:
+    def __init__(self):
+        self.heap = []
+
+    def size(self):
+        return len(self.heap)
+
+    def is_empty(self):
+        return self.size() == 0
+
+    def add(self, item):
+        self.heap.append(item)
+        self._heapify_up(self.size() - 1)
+
+    def get_min(self):
+        if self.is_empty():
+            return None
+        return self.heap[0]
+
+    def extract_min(self):
+        if self.is_empty():
+            return None
+        min_item = self.heap[0]
+        self.heap[0] = self.heap[self.size() - 1]
+        self.heap.pop()
+        self._heapify_down(0)
+        return min_item
+
+    def _parent(self, index):
+        return (index - 1) // 2
+
+    def _left_child(self, index):
+        return index * 2 + 1
+
+    def _right_child(self, index):
+        return index * 2 + 2
+
+    def _swap(self, i, j):
+        self.heap[i], self.heap[j] = self.heap[j], self.heap[i]
+
+    def _heapify_up(self, index):
+        parent_index = self._parent(index)
+        if index <= 0 or self.heap[parent_index] >= self.heap[index]:
+            return
+        self._swap(parent_index, index)
+        self._heapify_up(parent_index)
+
+    def _heapify_down(self, index):
+        l_index = self._left_child(index)
+        r_index = self._right_child(index)
+        largest_index = index
+        if l_index < self.size() and self.heap[l_index] > self.heap[largest_index]:
+            largest_index = l_index
+        if r_
