@@ -1,0 +1,42 @@
+import heapq
+
+class Event:
+    def __init__(self, timestamp, aircraft_number, event_type):
+        self.timestamp = timestamp
+        self.aircraft_number = aircraft_number
+        self.event_type = event_type
+
+    def __lt__(self, other):
+        # Define comparison based on timestamps.
+        return self.timestamp < other.timestamp
+
+class AirTrafficControl:
+    def __init__(self):
+        self.event_queue = []
+
+    def insert_event(self, timestamp, aircraft_number, event_type):
+        event = Event(timestamp, aircraft_number, event_type)
+        heapq.heappush(self.event_queue, event)
+
+    def extract_next_event(self):
+        if self.event_queue:
+            return heapq.heappop(self.event_queue)
+        else:
+            return None
+
+if __name__ == "__main__":
+    atc = AirTrafficControl()
+
+    # Insert events with timestamps
+    atc.insert_event(5, "Plane A", "Takeoff")
+    atc.insert_event(8, "Plane B", "Landing")
+    atc.insert_event(10, "Plane C", "Takeoff")
+    atc.insert_event(7, "Plane D", "Landing")
+
+    # Extract and process events in chronological order
+    while True:
+        next_event = atc.extract_next_event()
+        if next_event is None:
+            break
+
+        print(f"Time: {next_event.timestamp}, Aircraft: {next_event.aircraft_number}, Event: {next_event.event_type}")
