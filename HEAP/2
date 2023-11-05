@@ -1,0 +1,16 @@
+def sort_ascending(heap):
+    # sort the heap array in ascending order
+    heap.sort()
+
+def print_heap(heap):
+    # print the elements of the heap array
+    for element in heap:
+        print(element, end=' ')
+
+heap = [30, 10, 15, 5, 20, 25]
+print("Original Heap: ")
+print_heap(heap)
+
+sort_ascending(heap)
+print("\nHeap After Sorting in Ascending Order: ")
+print_heap(heap)
