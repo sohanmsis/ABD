@@ -1,0 +1,65 @@
+import heapq
+
+class Task:
+    def __init__(self, task_id, priority, execution_time, arrival_time):
+        self.task_id = task_id
+        self.priority = priority
+        self.execution_time = execution_time
+        self.arrival_time = arrival_time
+
+class PriorityQueue:
+    def __init__(self):
+        self.queue = []
+
+    def is_empty(self):
+        return not bool(self.queue)
+
+    def add_task(self, task):
+        heapq.heappush(self.queue, (task.priority, task.execution_time, task))
+
+    def get_next_task(self):
+        return heapq.heappop(self.queue)[2]
+
+class Scheduler:
+    def __init__(self):
+        self.current_time = 0
+        self.pq = PriorityQueue()
+        self.arrived_jobs = []
+
+    def add_task(self, task):
+        self.pq.add_task(task)
+        self.arrived_jobs.append((task.task_id, task.arrival_time))
+
+    def process_next_task(self, end_time):
+        if self.pq.is_empty() or self.current_time >= end_time:
+            return None
+
+        next_task = self.pq.get_next_task()
+        if self.current_time >= next_task.arrival_time:
+            self.current_time += next_task.execution_time
+            if self.current_time <= end_time:
+                return (next_task.task_id, next_task.execution_time, self.current_time)
+        return None
+
+def main():
+    s = Scheduler()
+    tasks = [
+        Task(1, 10, 3, 2),
+        Task(2, 5, 6, 5),
+        Task(3, 1, 9, 7),
+        Task(4, 7, 2, 10),
+    ]
+
+    for task in tasks:
+        s.add_task(task)
+
+    time_range_start = 3
+    time_range_end = 8
+
+    while not s.pq.is_empty():
+        result = s.process_next_task(time_range_end)
+        if result and result[2] >= time_range_start:
+            print(result)
+
+if __name__ == "__main":
+    main()
